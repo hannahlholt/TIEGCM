@@ -11,6 +11,7 @@ clear all;
 close all;
 
 aa1 = '~/Documents/MATLAB/TIEGCM/TIEGCM_output/';
+aa1 = '~/MATLAB/TIEGCM_files/';
 
 %----------------
 ut_want = 1;        % what time segment desired from simulation
@@ -243,13 +244,13 @@ total_mass_div_1 = -exp(iplvl_1) .* omega_ez_grad_1;     % total mass divergence
 %% 1. Diffusive & Actual Scale Heights vs Alt
 % figure
 % hold on;
-% plot(H_N2_diff_ilev(5:50), geop_alt(5:50), '--r' , 'Linewidth', 1.5);
-% plot(H_N2_star_ilev(5:50), geop_alt(5:50), 'r' , 'Linewidth', 1.5);
-% plot(H_O2_diff_ilev(5:50), geop_alt(5:50), '--b' , 'Linewidth', 1.5);
-% plot(H_O2_star_ilev(5:50), geop_alt(5:50), 'b' , 'Linewidth', 1.5);
-% plot(H_O1_diff_ilev(5:50), geop_alt(5:50), '--k' , 'Linewidth', 1.5);
-% plot(H_O1_star_ilev(5:50), geop_alt(5:50), 'k' , 'Linewidth', 1.5);
-% plot(H_tot_star_ilev(5:50), geop_alt(5:50), 'g' , 'Linewidth', 1.5); % already on interfaces
+% plot(H_N2_diff_ilev(i_index, 5:50), geop_alt(5:50), '--r' , 'Linewidth', 1.5);
+% plot(H_N2_star_ilev(i_index, 5:50), geop_alt(5:50), 'r' , 'Linewidth', 1.5);
+% plot(H_O2_diff_ilev(i_index, 5:50), geop_alt(5:50), '--b' , 'Linewidth', 1.5);
+% plot(H_O2_star_ilev(i_index, 5:50), geop_alt(5:50), 'b' , 'Linewidth', 1.5);
+% plot(H_O1_diff_ilev(i_index, 5:50), geop_alt(5:50), '--k' , 'Linewidth', 1.5);
+% plot(H_O1_star_ilev(i_index, 5:50), geop_alt(5:50), 'k' , 'Linewidth', 1.5);
+% plot(H_tot_star_ilev(i_index, 5:50), geop_alt(5:50), 'g' , 'Linewidth', 1.5); % already on interfaces
 % xlabel('Scale Height [km]');
 % ylabel('Altitude [km]');
 % % xlim([0 350])
@@ -260,15 +261,15 @@ total_mass_div_1 = -exp(iplvl_1) .* omega_ez_grad_1;     % total mass divergence
 
 thisfig = figure();
 hold on;
-plot(H_He_diff_ilev(5:50), geop_alt(5:50), '--k' , 'Linewidth', 1.5);
-plot(H_He_star_ilev(5:50), geop_alt(5:50), 'k' , 'Linewidth', 1.5);
+plot(H_He_diff_ilev_1(i_index, 5:50), geop_alt(5:50), '--k' , 'Linewidth', 1.5);
+plot(H_He_star_ilev_1(i_index, 5:50), geop_alt(5:50), 'k' , 'Linewidth', 1.5);
 xlabel('Scale Height [km]');
 ylabel('Altitude [km]');
 ylim([geop_alt(5) 550])
 title('Helium Scale Heights (ilev surfaces)');
 legend('H_{\rho}','H^*_{\rho}', 'location', 'best');
 grid on;
-saveas(thisfig, ['./Figures/Helium_Paper/He_Density_ScaleHeights_', name, '.pdf'])
+saveas(thisfig, ['./Figures/Helium_Paper/He_Density_ScaleHeights_', name, '.svg'])
 
 %% 2. Diffusion Coeff Vs Alt
 % figure
@@ -320,13 +321,14 @@ plot(O1_mmr_ilev(1:50), geop_alt(1:50), 'Linewidth', 1.5);
 hold on
 plot(He_mmr_ilev, geop_alt, 'Linewidth', 1.5);
 
-legend('N2','O2','O1','He', 'location', 'best');
+legend('N2','O2','O1','He', 'location', 'Northwest');
 title(['TIEGCM Mass Mixing Ratios for Lat = ', num2str(lat_want) , ', Lon = ', num2str(lon_want)]);
-ylim([120 700])
+ylim([120 550]);
+set(gca, 'XScale', 'log');
 xlabel('Mass Mixing Ratio');
 ylabel('Geopotential Altitude [km]');
 grid on;
-saveas(thisfig, ['./Figures/Helium_Paper/MMRs_', name, '.pdf'])
+saveas(thisfig, ['./Figures/Helium_Paper/MMRs_', name, '.svg'])
 
 %% 7. grad(MMR) vs Alt
 % subplot(122)
