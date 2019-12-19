@@ -14,7 +14,7 @@ aa1 = '~/Documents/MATLAB/TIEGCM/TIEGCM_output/';
 
 %----------------
 ut_want = 1;        % what time segment desired from simulation
-feat = 1;           % Select latitude and longitude desired
+feat = 2;           % Select latitude and longitude desired
 pdrag = 1;          % 1 if pdrag file used, 0 if not
 
 % ----- Global Features -------
@@ -25,8 +25,8 @@ name = 'N_He_max';
 name2 = 'HELIUM ENHANCEMENT AT 400 KM';
 end
 if feat == 2 
-lon_want = 85;      % South nighttime maximum feature
-lat_want = -58.75;
+lon_want = 90;      % South nighttime maximum feature
+lat_want = -53.75;
 name = 'S_He_max';
 name2 = 'HELIUM ENHANCEMENT AT 400 KM';
 end
@@ -37,9 +37,8 @@ name = 'N_He_min';
 name2 = 'HELIUM DEPLETION AT 400 KM';
 end
 if feat == 4
-lon_want = -77.5;       % South Daytime minimum feature
-lat_want = -46.25;      % true minimum is at -13.75 in the Southern hemi!!
-% lat_want = -13.75;
+lon_want = -72.5;       % South Daytime minimum feature
+lat_want = -53.75;      % true minimum is at -13.75 in the Southern hemi!!
 name = 'S_He_min';
 name2 = 'HELIUM DEPLETION AT 400 KM';
 
@@ -166,7 +165,7 @@ D_O2 = Di_TIEGCM('O2', tn_alt, p_Pa');
 D_O1 = Di_TIEGCM('O1', tn_alt, p_Pa');
 D_He = Di_TIEGCM('He', tn_alt, p_Pa');
 
-D_Ti = -0.36*D_He; % use new version
+D_Ti = -0.38*D_He; % use new version
 
 winds_model = wn_alt/100;       %[m/s]   
 
@@ -259,17 +258,17 @@ total_mass_div_1 = -exp(iplvl_1) .* omega_ez_grad_1;     % total mass divergence
 % title('Neutral Species Scale Heights (ilev surfaces)');
 % legend('N2 diff','N2 actual','O2 diff','O2 actual','O1 diff','O1 actual','Total Gas', 'location', 'best');
 
-% figure
-% hold on
-% plot(H_He_diff_ilev(5:50), geop_alt(5:50), '--k' , 'Linewidth', 1.5);
-% plot(H_He_star_ilev(5:50), geop_alt(5:50), 'k' , 'Linewidth', 1.5);
-% plot(H_tot_star(5:50), geop_alt(5:50), 'g' , 'Linewidth', 1.5);
-% xlabel('Scale Height [km]');
-% ylabel('Altitude [km]');
-% ylim([geop_alt(5) 550])
-% title('Helium Scale Heights (ilev surfaces)');
-% legend('HE diff','HE actual','Total Gas', 'location', 'best');
-% grid on;
+thisfig = figure();
+hold on;
+plot(H_He_diff_ilev(5:50), geop_alt(5:50), '--k' , 'Linewidth', 1.5);
+plot(H_He_star_ilev(5:50), geop_alt(5:50), 'k' , 'Linewidth', 1.5);
+xlabel('Scale Height [km]');
+ylabel('Altitude [km]');
+ylim([geop_alt(5) 550])
+title('Helium Scale Heights (ilev surfaces)');
+legend('H_{\rho}','H^*_{\rho}', 'location', 'best');
+grid on;
+saveas(thisfig, ['./Figures/Helium_Paper/He_Density_ScaleHeights_', name, '.pdf'])
 
 %% 2. Diffusion Coeff Vs Alt
 % figure
@@ -311,22 +310,23 @@ total_mass_div_1 = -exp(iplvl_1) .* omega_ez_grad_1;     % total mass divergence
 % legend('With Thermal Diffusion', 'No Thermal Diffusion');
 
 %% 6. MMR vs Alt
-% figure()
-% subplot(121);
-% plot(N2_mmr_ilev(1:50), geop_alt(1:50), 'Linewidth', 1.5);
-% hold on
-% plot(O2_mmr_ilev(1:50), geop_alt(1:50), 'Linewidth', 1.5);
-% hold on
-% plot(O1_mmr_ilev(1:50), geop_alt(1:50), 'Linewidth', 1.5);
-% hold on
-% plot(He_mmr_ilev, geop_alt, 'Linewidth', 1.5);
-% 
-% legend('N2','O2','O1','He', 'location', 'best');
-% title(['TIEGCM Mass Mixing Ratios for Lat = ', num2str(lat_want) , ', Lon = ', num2str(lon_want)]);
-% ylim([120 700])
-% xlabel('Mass Mixing Ratio');
-% ylabel('Geopotential Altitude [km]');
-% grid on;
+thisfig = figure();
+
+plot(N2_mmr_ilev(1:50), geop_alt(1:50), 'Linewidth', 1.5);
+hold on
+plot(O2_mmr_ilev(1:50), geop_alt(1:50), 'Linewidth', 1.5);
+hold on
+plot(O1_mmr_ilev(1:50), geop_alt(1:50), 'Linewidth', 1.5);
+hold on
+plot(He_mmr_ilev, geop_alt, 'Linewidth', 1.5);
+
+legend('N2','O2','O1','He', 'location', 'best');
+title(['TIEGCM Mass Mixing Ratios for Lat = ', num2str(lat_want) , ', Lon = ', num2str(lon_want)]);
+ylim([120 700])
+xlabel('Mass Mixing Ratio');
+ylabel('Geopotential Altitude [km]');
+grid on;
+saveas(thisfig, ['./Figures/Helium_Paper/MMRs_', name, '.pdf'])
 
 %% 7. grad(MMR) vs Alt
 % subplot(122)
@@ -467,7 +467,7 @@ total_mass_div_1 = -exp(iplvl_1) .* omega_ez_grad_1;     % total mass divergence
 
 %% ---- Comparing Terms in Momentum Eq ------
 
-%% 11. 1D Altitude Profiles
+%% 11. 1D Altitude Profiles 
 % ytop = geop_alt(end-2);
 % ybot = 120;
 % logic = geop_alt > ybot & geop_alt < ytop;

@@ -41,9 +41,9 @@ z0_low = 110E3;         % lowest value we want to integrate from [m]
 z0_high = 400E3;        % highest value we want to integrate too ~ 400 m
 
 alpha = 0;              % thermal diffusion factor
-%alpha = -0.38; 
+alpha = -0.38; 
 pdrag = 1;
-species = 'N2';         % which species do you want? 'HE', 'N2', 'O', or 'O2'
+species = 'HE';         % which species do you want? 'HE', 'N2', 'O', or 'O2'
 %----------------
 
 aa1 = '~/Documents/MATLAB/TIEGCM/TIEGCM_output/';
@@ -294,43 +294,7 @@ dlmwrite([aa2_press 'p_lvls.txt'], plvl(p_indx_low:p_indx_high))
 fprintf('\nDONE!\n')
 
 
-%% plot a latitude slice for all Zp and Long
-% % check for tilted structure in  temperature scale height
-% close all;
-% a = 1;
-% b = 20;
-% lat_pt = 37;  % index 37 = 1.25 deg latitude
-% 
-% 
-% x = lon;
-% y = plvl(a:b);
-% [X, Y] = meshgrid(x, y);
-% 
-% num_cont = 300;
-% c = jet(300);
-% colormap(c); 
-% Q = squeeze(H_rho(:,lat_pt,(a:b)));
-% 
-% contourf(X, Y, 1./(Q')/1000, num_cont, 'linecolor', 'none')
-% title('TIEGCM N2 Density Scale Height H_{\rho} at 1.25 deg N') 
-% cbar = colorbar();
-% cbar.Label.String = 'H_{\rho} [km]';
-% xlabel('Longtitude [Deg]');
-% ylabel('Pressure Level');
-% saveas(gcf,'~/Desktop/tilted_N2_scaleheight.pdf');
-% % subplot(1,2,2);
-% % contourf(X, Y, Q', num_cont, 'linecolor', 'none')
-% % xlim([80 90]);
-% % title('N2 Pressure Scale Height 1/H_{\rho}') 
-% % cbar = colorbar();
-% % cbar.Label.String = '1/H_{\rho} [1/km]';
-% 
-
-
-
-% 
-% %%
-% % ------ THE FOLLOWING IS FOR COMPARING THE SCALE HEIGHTS. ------
+%% ------ THE FOLLOWING IS FOR COMPARING THE SCALE HEIGHTS. ------
 % 
 % 
 % x = lon;    % longitude values [deg]
@@ -538,7 +502,7 @@ close(this_fig)
 
 
 
-% COMPARING THE MIDPOINTS TO INTERFACES - 7/16/19
+%% COMPARING THE MIDPOINTS TO INTERFACES - 7/16/19
 
 % first, we want to put our Hp_mean (which is currently on midpoint lvls)
 % onto interface levels.
