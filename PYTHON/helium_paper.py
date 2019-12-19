@@ -7,88 +7,90 @@ import numpy as np
 
 
 
-# #==============================================================================
-# # Creating the TIEGCM Vs. MSIS Helium Number Density at 400 km geometric
-# #==============================================================================
+# # #==============================================================================
+# # # Creating the TIEGCM Vs. MSIS Helium Number Density at 400 km geometric
+# # #==============================================================================
+# #
+# # # LOAD TIEGCM GEOMETRIC DATA
+# # #==============================================================================
 #
-# # LOAD TIEGCM GEOMETRIC DATA
+# # HE number density [1/cm^3] for 2.5 degree size with ion drag at 400 km geometric altitude
+# TIEGCMfile = '/Users/hannahholt/Documents/MATLAB/TIEGCM/Contour_textfiles/geom_coord/HE_alpha_-0.38/HE_dens_model_400km_pdrag.txt'
+#
+# # Load TIEGCM data file
+# TIEGCM_data = np.loadtxt(TIEGCMfile,delimiter=',')
+#
+#
+# # CALL MSIS
 # #==============================================================================
-
-# HE number density [1/cm^3] for 2.5 degree size with ion drag at 400 km geometric altitude
-TIEGCMfile = '/Users/hannahholt/Documents/MATLAB/TIEGCM/Contour_textfiles/geom_coord/HE_alpha_-0.38/HE_dens_model_400km_pdrag.txt'
-
-# Load TIEGCM data file
-TIEGCM_data = np.loadtxt(TIEGCMfile,delimiter=',')
-
-
-# CALL MSIS
-#==============================================================================
-lat = 0.
-lon = 0.
-dn = datetime(1992, 3, 20, 0, 2)#year,month,day,hour,minute
-
-MSIS_data = np.zeros((72,144))
-marklon = 0
-gridspace = 2.5         # 2.5 degree grid spacing
-
-#Loop through lat and lon. select what MSIS values are desired
-for Lon in range(-72,72,1) :
-    marklat = 0
-    for Lat in range(-36,36,1):
-        pt = pyglow.Point(dn, Lat*2.5, Lon*2.5, 400) #1.5 degree grid size
-        result = pt.run_msis()
-        MSIS_data[marklat,marklon] = result.nn['HE']   # helium number density
-        marklat = marklat+1
-    marklon = marklon+1
-
-
-# LOAD MAGNETIC EQUATOR PTS
-#==============================================================================
-mag_equator = np.loadtxt("Magnetic_equator_lat_lon.txt", delimiter=',')
-magnetic_x = np.linspace(0, 143 / 6, 360)
-
-# Create grid
-x = np.linspace(0, 143 / 6, 144)
-y = np.linspace(-88.75, 88.75, 72)
-X, Y = np.meshgrid(x, y)
-
-LT_ticks = np.array([12., 15., 18., 21., 0., 3., 6., 9., 12.])
-
-# PLOT FIGURE
-#==============================================================================
-
-DATmin = np.amin(TIEGCM_data)
-DATmax = np.amax(TIEGCM_data)
-
-fig = plt.figure(figsize=(14, 5))  # makes the figure bigger
-
-plt.subplot(121)
-levels = np.linspace(DATmin, DATmax, 100)
-myplot = plt.contourf(X, Y, TIEGCM_data, levels, cmap='jet')
-cont = plt.contour(X, Y, TIEGCM_data, 10, colors='k')
-cbar = plt.colorbar(myplot, format='%.2e')
-cbar.ax.set_ylabel('Number Density [1/cm^3]')
-
-plt.plot(magnetic_x,mag_equator[:,1],'r') #Add magnetic equator line
-plt.xticks(np.arange(0., 24., 3.), LT_ticks)
-plt.title('TIEGCM Helium Density 400km UT=0 with Ion Drag')
-plt.xlabel('Local Solar Time [hr]')
-plt.ylabel('Latitude [deg]')
-
-plt.subplot(122)
-levels = np.linspace(DATmin, DATmax, 100)
-myplot = plt.contourf(X, Y, MSIS_data, levels, cmap='jet')
-cont = plt.contour(X, Y, MSIS_data, 10, colors='k')
-cbar = plt.colorbar(myplot, format='%.2e')
-cbar.ax.set_ylabel('Number Density [1/cm^3]')
-
-plt.plot(magnetic_x, mag_equator[:,1],'r') #Add magnetic equator line
-plt.xticks(np.arange(0., 24., 3.), LT_ticks)
-plt.title('MSIS Helium Density 400km UT=0')
-plt.xlabel('Local Solar Time [hr]')
-plt.savefig('./helium_paper_figs/MSISvsTIEGCM_He_400km.pdf')
-plt.show()
-
+# lat = 0.
+# lon = 0.
+# dn = datetime(1992, 3, 20, 0, 2)#year,month,day,hour,minute
+#
+# MSIS_data = np.zeros((72,144))
+# marklon = 0
+# gridspace = 2.5         # 2.5 degree grid spacing
+#
+# #Loop through lat and lon. select what MSIS values are desired
+# for Lon in range(-72,72,1) :
+#     marklat = 0
+#     for Lat in range(-36,36,1):
+#         pt = pyglow.Point(dn, Lat*2.5, Lon*2.5, 400) #2.5 degree grid size
+#         result = pt.run_msis()
+#         MSIS_data[marklat,marklon] = result.nn['HE']   # helium number density
+#         marklat = marklat+1
+#     marklon = marklon+1
+#
+# F107 = pt.f107
+# Ap = pt.ap
+#
+#
+# # LOAD MAGNETIC EQUATOR PTS
+# #==============================================================================
+# mag_equator = np.loadtxt("Magnetic_equator_lat_lon.txt", delimiter=',')
+# magnetic_x = np.linspace(0, 143 / 6, 360)
+#
+# # Create grid
+# x = np.linspace(0, 143 / 6, 144)
+# y = np.linspace(-88.75, 88.75, 72)
+# X, Y = np.meshgrid(x, y)
+#
+# LT_ticks = np.array([12., 15., 18., 21., 0., 3., 6., 9., 12.])
+#
+# # PLOT FIGURE 1 - TIEGCM vs MSIS at 400 km geometric
+# # ==============================================================================
+#
+# DATmin = np.amin(TIEGCM_data)
+# DATmax = np.amax(TIEGCM_data)
+#
+# fig = plt.figure(figsize=(14, 5))  # makes the figure bigger
+#
+# plt.subplot(121)
+# levels = np.linspace(DATmin, DATmax, 100)
+# myplot = plt.contourf(X, Y, TIEGCM_data, levels, cmap='jet')
+# cont = plt.contour(X, Y, TIEGCM_data, 10, colors='k')
+# cbar = plt.colorbar(myplot, format='%.2e')
+# cbar.ax.set_ylabel('Number Density [1/cm^3]')
+#
+# plt.plot(magnetic_x,mag_equator[:,1],'r') #Add magnetic equator line
+# plt.xticks(np.arange(0., 24., 3.), LT_ticks)
+# plt.title('TIEGCM Helium Density 400km UT=0 with Ion Drag')
+# plt.xlabel('Local Solar Time [hr]')
+# plt.ylabel('Latitude [deg]')
+#
+# plt.subplot(122)
+# levels = np.linspace(DATmin, DATmax, 100)
+# myplot = plt.contourf(X, Y, MSIS_data, levels, cmap='jet')
+# cont = plt.contour(X, Y, MSIS_data, 10, colors='k')
+# cbar = plt.colorbar(myplot, format='%.2e')
+# cbar.ax.set_ylabel('Number Density [1/cm^3]')
+#
+# plt.plot(magnetic_x, mag_equator[:,1],'r') #Add magnetic equator line
+# plt.xticks(np.arange(0., 24., 3.), LT_ticks)
+# plt.title('MSIS Helium Density 400km UT=0, F10.7=167.2, Ap=3')
+# plt.xlabel('Local Solar Time [hr]')
+# plt.savefig('./helium_paper_figs/MSISvsTIEGCM_He_400km.pdf')
+# plt.show()
 
 
 
@@ -250,3 +252,64 @@ plt.show()
 #
 # plt.savefig('./helium_paper_figs/Neut_Temp+Winds_~400km.pdf')
 # plt.show()
+
+
+#==============================================================================
+# TIEGCM He density percent difference w/ and w/o thermal diffusion
+#==============================================================================
+
+
+species = 'HE'                  # which species
+alpha = ['-0.38', '0']          # thermal diffusion factor
+
+infolder1 = '/Users/hannahholt/Documents/MATLAB/TIEGCM/Contour_textfiles/pressure/' + species + '_alpha_' + alpha[0] + '/'
+infolder2 = '/Users/hannahholt/Documents/MATLAB/TIEGCM/Contour_textfiles/pressure/' + species + '_alpha_' + alpha[1] + '/'
+
+# first load the of lower boundary pressure level points
+plvls = np.loadtxt(infolder1 + "p_lvls.txt", delimiter=',')
+
+# Load magnetic equator data points to be overlayed on plot
+mag_equator = np.loadtxt("Magnetic_equator_lat_lon.txt", delimiter=',')
+marklon = 0
+magnetic_x = np.linspace(0, 143 / 6, 360)
+
+LT_ticks = np.array([12., 15., 18., 21., 0., 3., 6., 9., 12.])
+x = np.linspace(0, 143 / 6, 144)
+y = np.linspace(-88.75, 88.75, 72)
+X, Y = np.meshgrid(x, y)
+
+i = 0
+
+p0_infolder1 = infolder1 + 'plvl_' + str(plvls[i]) + '/'  # input folders for text files from every z0 point for thermal diff.
+p0_infolder2 = infolder2 + 'plvl_' + str(plvls[i]) + '/'  # input folders for text files from every z0 point for NO therm diff
+
+# first, load the all the data
+data_integrated_therm = np.loadtxt(p0_infolder1 + species + "_dens_Diffusive_400_pdrag.txt", delimiter=',')
+data_integrated_notherm = np.loadtxt(p0_infolder2 + species + "_dens_Diffusive_400_pdrag.txt", delimiter=',')
+
+# find the percDiff between the integrated plots
+data_differenced = ( np.divide(data_integrated_therm, data_integrated_notherm) - 1 ) * 100
+mind = 50
+maxd = 95
+
+fig = plt.figure() # makes the figure bigger
+
+# ------------  Percent differences -----------------------
+levels = np.linspace(mind, maxd, 300)                       # set your beginging limits for colorbar
+cont = plt.contour(X, Y, data_differenced, 12, colors='k')
+myplot = plt.contourf(X, Y, data_differenced, levels, cmap='jet')
+cbar = plt.colorbar(myplot, format='%.0f')
+cbar.ax.set_ylabel('Percent Difference between ')
+plt.title('Helium Density Percent Difference at ~400 km\n' + 'Z0 = ' + str(plvls[i]))
+
+plt.xticks(np.arange(0., 24., 3.), LT_ticks)
+plt.plot(magnetic_x, mag_equator[:, 1], 'r')  # Add magnetic equator line
+plt.xlabel('Local Solar Time [hr]')
+plt.ylabel('Latitude [deg]')
+
+
+plt.show()
+plt.savefig('./helium_paper_figs/He_dens_ThermVSnoTherm.pdf')
+plt.close()
+
+
