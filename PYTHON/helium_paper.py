@@ -278,7 +278,8 @@ x = np.linspace(0, 143 / 6, 144)
 y = np.linspace(-88.75, 88.75, 72)
 X, Y = np.meshgrid(x, y)
 
-i = 0
+i = 4       # use plvl = -3.625
+
 
 p0_infolder1 = infolder1 + 'plvl_' + str(plvls[i]) + '/'  # input folders for text files from every z0 point for thermal diff.
 p0_infolder2 = infolder2 + 'plvl_' + str(plvls[i]) + '/'  # input folders for text files from every z0 point for NO therm diff
@@ -289,8 +290,8 @@ data_integrated_notherm = np.loadtxt(p0_infolder2 + species + "_dens_Diffusive_4
 
 # find the percDiff between the integrated plots
 data_differenced = ( np.divide(data_integrated_therm, data_integrated_notherm) - 1 ) * 100
-mind = 50
-maxd = 95
+mind = 30
+maxd = 60
 
 fig = plt.figure() # makes the figure bigger
 
@@ -299,17 +300,17 @@ levels = np.linspace(mind, maxd, 300)                       # set your beginging
 cont = plt.contour(X, Y, data_differenced, 12, colors='k')
 myplot = plt.contourf(X, Y, data_differenced, levels, cmap='jet')
 cbar = plt.colorbar(myplot, format='%.0f')
-cbar.ax.set_ylabel('Percent Difference between ')
-plt.title('Helium Density Percent Difference at ~400 km\n' + 'Z0 = ' + str(plvls[i]))
+cbar.ax.set_ylabel('Perc. Diff. With and Without Thermal Diffusion')
+plt.title('Helium Density Percent Difference at ~400 km\n' + r'Z$_0$ = ' + str(plvls[i]))
 
 plt.xticks(np.arange(0., 24., 3.), LT_ticks)
 plt.plot(magnetic_x, mag_equator[:, 1], 'r')  # Add magnetic equator line
 plt.xlabel('Local Solar Time [hr]')
 plt.ylabel('Latitude [deg]')
 
+plt.savefig('./helium_paper_figs/He_dens_ThermVSnoTherm.pdf')
 
 plt.show()
-plt.savefig('./helium_paper_figs/He_dens_ThermVSnoTherm.pdf')
 plt.close()
 
 
