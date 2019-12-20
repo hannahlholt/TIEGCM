@@ -15,7 +15,7 @@ aa1 = '~/MATLAB/TIEGCM_files/';
 
 %----------------
 ut_want = 1;        % what time segment desired from simulation
-feat = 2;           % Select latitude and longitude desired
+feat = 4;           % Select latitude and longitude desired
 pdrag = 1;          % 1 if pdrag file used, 0 if not
 
 % ----- Global Features -------

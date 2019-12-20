@@ -500,8 +500,6 @@ sgtitle(['TIEGCM Pressure Comparison (ilev) for Lat = ', num2str(lat_want) , ', 
 % saveas(this_fig, ['./Figures/TIEGCM_hydrostatic_ilev_latlon_', num2str(lat_want), '_', num2str(lon_want), '.png'])
 close(this_fig)
 
-
-
 %% COMPARING THE MIDPOINTS TO INTERFACES - 7/16/19
 
 % first, we want to put our Hp_mean (which is currently on midpoint lvls)
